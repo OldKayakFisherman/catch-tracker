@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  catchtracker-api:
+    image: postgrest/postgrest
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMA}
+      PGRST_DB_ANON_ROLE: ${POSTGREST_ANON_ROLE}
+    depends_on:
+      - catchtracker-db
+  
+  catchtracker-db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      ADMIN_USER_EMAIL: ${ADMIN_USER_EMAIL}
+      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD}
+      ADMIN_USER_USERNAME: ${ADMIN_USER_USERNAME}
+      ADMIN_USER_LATITUDE: ${ADMIN_USER_LATITUDE}
+      ADMIN_USER_LONGITUDE: ${ADMIN_USER_LONGITUDE}
+      POSTGREST_ANON_ROLE: ${POSTGREST_ANON_ROLE}
+      POSTGREST_AUTHENTICATOR: ${POSTGREST_AUTHENTICATOR}
+      POSTGREST_AUTHENTICATOR_PASSWORD: ${POSTGREST_AUTHENTICATOR_PASSWORD}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/
+      - ./pginit:/docker-entrypoint-initdb.d/     

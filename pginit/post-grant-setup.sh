@@ -1,0 +1,7 @@
+psql -a -b -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "
+
+    GRANT USAGE ON SCHEMA api TO ${POSTGREST_ANON_ROLE};
+    GRANT EXECUTE ON FUNCTION validate_password(text, text) TO ${POSTGREST_ANON_ROLE};
+    GRANT EXECUTE ON FUNCTION api.validate_user(text, text) TO ${POSTGREST_ANON_ROLE};
+    GRANT SELECT ON api.users TO ${POSTGREST_ANON_ROLE};
+"
