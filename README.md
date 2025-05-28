@@ -13,6 +13,7 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 ## Customize configuration
 
 See [Vite Configuration Reference](https://vite.dev/config/).
+[Vite SetUp](https://tailwindcss.com/docs/installation/using-vite)
 
 ## Project Setup
 
