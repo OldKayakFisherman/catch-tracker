@@ -2,6 +2,7 @@
     import "leaflet/dist/leaflet.css"
     import * as L from 'leaflet';
     import {computed, onMounted, ref} from 'vue'
+    import type { MapMarkerAddedResult } from '@/types/index';
 
     const props = defineProps({
         mapWidthPercentage: {type: Number, default: 50}, 
@@ -32,22 +33,31 @@
     let componentMap: L.Map | L.LayerGroup<any>;
 
     
-    const map_markers= ref<number[][]>([])
+    const map_markers= ref<any>([])
 
+    function addMarkerToMap(evt: L.LeafletMouseEvent){
 
-    function addPointToMap(evt: L.LeafletMouseEvent){
+        //let selected_coordinates: [number, number] = [evt.latlng.lat, evt.latlng.lng]
+        let selected_coordinates: MapMarkerAddedResult = {
+            latitude: evt.latlng.lat,
+            longitude: evt.latlng.lng
+        };
         
-        let selected_coordinates: [number, number][] = [[evt.latlng.lat, evt.latlng.lng]]
 
-        L.marker(evt.latlng)
+        let newMarker = L.marker(evt.latlng)
 
+        //Remove markers if needed
         if(props.singleMarker == true){
             if (map_markers.value.length > 0) {
-                map_markers.value = []
+                for(let i = 0; i < map_markers.value.length; i++){
+                    componentMap.removeLayer(map_markers.value[i]);         
+                }
             }
         }
 
-        map_markers.value.push([evt.latlng.lat, evt.latlng.lng])
+        map_markers.value.push(newMarker)
+
+        componentMap.addLayer(newMarker)
 
         emit("markerAdded", selected_coordinates)
 
@@ -60,10 +70,14 @@
     function setupMap(){
         componentMap = L.map('map').setView(centerCoordinates.value, props.defaultZoom);
         
+        
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19, 
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(componentMap);     
+        }).addTo(componentMap);  
+        
+
+        componentMap.on("click", addMarkerToMap)
     }
 
 </script>
@@ -74,7 +88,7 @@
 
 <style scoped>
     .map-container {
-        width: v-bind(mapWidthPercentage);
-        height: v-bind(mapHeightPercentage);
+        width: v-bind(mapWidth);
+        height: v-bind(mapHeight);
     }
 </style>
