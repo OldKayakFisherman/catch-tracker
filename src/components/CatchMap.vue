@@ -52,12 +52,17 @@
                 for(let i = 0; i < map_markers.value.length; i++){
                     componentMap.removeLayer(map_markers.value[i]);         
                 }
+
+                
+                componentMap.remove();
+                setupMap();
             }
         }
 
         map_markers.value.push(newMarker)
 
         componentMap.addLayer(newMarker)
+        
 
         emit("markerAdded", selected_coordinates)
 

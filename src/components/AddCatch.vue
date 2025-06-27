@@ -2,9 +2,9 @@
     import CatchMap from './CatchMap.vue';
     import type { MapMarkerAddedResult } from '@/types/index';
     import { ref } from 'vue';
-    import { VContainer, VRow, VCol } from 'vuetify/components';
+    import { VContainer, VRow, VCol, VIcon, VTooltip } from 'vuetify/components';
     import { VSelect, VTextField, VForm, VBtn } from 'vuetify/components';
-    import { VFileUpload } from 'vuetify/labs/VFileUpload';
+    import { VFileUpload} from 'vuetify/labs/VFileUpload';
 
     const selected_latitude = ref<Number | any>(null)
     const selected_longitude = ref<Number | any>(null)
@@ -92,8 +92,11 @@
                         <v-col>
                             <v-select label="Species:"  class="form-control" v-model="selected_species" 
                                 density="compact" variant="outlined" clearable>
-                            </v-select>    
-                        </v-col>
+                            </v-select>
+                            <v-tooltip text="Add New Species">    
+                            <v-icon icon="mdi-cog-outline"></v-icon>
+                            </v-tooltip>
+                        </v-col>           
                     </v-row>
 
                     <!-- Weight -->
